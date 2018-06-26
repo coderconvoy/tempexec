@@ -13,7 +13,7 @@ import (
 func main() {
 	cfg, _ := lz2.LoadConfig("conf", true)
 	tname, tempok := cfg.Flag("t", "Location of template", "config.template")
-	_, headed := cfg.Flag("h", "Is the file headed?", "config.headed")
+	_, unheaded := cfg.Flag("-uh", "unheaded: there is no hmd type header", "config.unheaded")
 	_, isMD := cfg.Flag("md", "Is the file Markdown", "config.markdown")
 	wrap, wrapok := cfg.Flag("wrap", "wrapper: use '-' for default html", "config.wrap_def")
 
@@ -27,7 +27,7 @@ func main() {
 	}
 	var sget SGetter = cfg
 
-	if headed {
+	if !unheaded {
 		mp := parse.Headed(dt)
 		ds, ok := mp["contents"]
 		if !ok {
