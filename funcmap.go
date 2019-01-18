@@ -6,6 +6,7 @@ import (
 
 	"github.com/coderconvoy/lz2"
 	"github.com/coderconvoy/qrunner"
+	"github.com/russross/blackfriday"
 )
 
 type SGetter interface {
@@ -48,8 +49,26 @@ func configBuilder(cfg SGetter) func(string, ...string) string {
 	}
 }
 
+func seq(n int, n2 ...int) []int {
+	res := []int{}
+	if len(n2) == 0 {
+		for v := 0; v < n; v++ {
+			res = append(res, v)
+		}
+		return res
+	}
+	for v := n; v < n2[0]; v++ {
+		res = append(res, v)
+	}
+	return res
+}
+
 func join(s ...string) string {
 	return path.Join(s...)
+}
+
+func do_md(s string) string {
+	return string(blackfriday.MarkdownCommon([]byte(s)))
 }
 
 func FuncMap(cfg SGetter) map[string]interface{} {
@@ -57,5 +76,7 @@ func FuncMap(cfg SGetter) map[string]interface{} {
 		"exec": exec,
 		"cfg":  configBuilder(cfg),
 		"join": join,
+		"seq":  seq,
+		"md":   do_md,
 	}
 }

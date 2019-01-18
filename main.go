@@ -37,10 +37,6 @@ func main() {
 		sget = HeadGetter{mp, cfg}
 	}
 
-	if isMD {
-		dt = blackfriday.MarkdownCommon(dt)
-	}
-
 	if !tempok {
 		log.Fatal("No Template provided")
 	}
@@ -53,6 +49,10 @@ func main() {
 	res, err := tp.Exec(nil)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if isMD {
+		res = blackfriday.MarkdownCommon(res)
 	}
 
 	if wrapok {
